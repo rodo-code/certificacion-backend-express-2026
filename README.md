@@ -13,3 +13,4 @@
 |---|---|---|
 | 3 | 13 de mayo | [Funciones](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Clase3-Funciones) |
 | 4 | 14 de mayo | [Objetos y Arreglos](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Clase4-Objetos-Arrays) |
+| 5 | 15 de mayo | [Funciones de Orden Superior](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Clase5-Funciones-Orden-Superior) |
