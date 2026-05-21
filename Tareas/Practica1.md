@@ -1,4 +1,4 @@
-# Ejercicios para Viernes 15 de mayo
+# Práctica 1 para Viernes 15 de mayo
 
 ---
 
