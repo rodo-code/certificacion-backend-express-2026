@@ -1,0 +1,13 @@
+{
+  "author": "Rodolfo Catunta",
+  "name": "clase9-rodolfo",
+  "description": "Probando node",
+  "version": "1.0.0",
+  "main": "main.js",
+  "dependencies": {
+    "dijkstrajs": "^1.0.1",
+    "ini": "^6.0.0",
+    "random-item": "^1.0.0"
+  },
+  "license": "ISC"
+}
