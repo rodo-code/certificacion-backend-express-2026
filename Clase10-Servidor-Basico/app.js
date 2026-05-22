@@ -3,14 +3,34 @@ import http from "http";
 
 const PORT = 3000;
 
-const server = http.createServer((req, res) => {
-    console.log(req);
-    res.setHeader("Content-Type", "text/html; charset=utf-8");
+const server = http.createServer(async (req, res) => {
+    // All responses will be JSON
+    res.setHeader("Content-Type","application/json");
+    let urlParameters = req.url.split("/");
+    console.log(urlParameters);
 
-    res.end(`
-        <h1>Hola soy Rodolfo desde el Servidor</h1>
-        <p>Este HTML fue enviado desde Node.js.</p>
-    `);
+    // Handle the route localhost:3000/words
+    if(req.method == 'GET' && req.url == '/words'){
+        const content = await getContent();
+        res.statusCode = 200;
+        res.end(JSON.stringify({
+            content
+        }));
+        return; // To finalize the execution of this request
+    }
+    if(req.method == 'POST' && urlParameters[1]=="addword" && urlParameters[2]){
+        await addText(urlParameters[2]);
+        res.statusCode = 200;
+        let message = `The word ${urlParameters[2]} was added to the file`;
+        res.end(JSON.stringify({
+            "message": message
+        }));
+        return;
+    }
+    res.statusCode = 404;
+    res.end(JSON.stringify({
+        "error": "Not method to handle the url"
+    }));
 });
 
 server.listen(PORT, () => {
