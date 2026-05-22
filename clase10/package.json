@@ -1,0 +1,14 @@
+{
+  "name": "clase10",
+  "version": "1.0.0",
+  "description": "clase10",
+  "license": "ISC",
+  "author": "Abner",
+  "type": "module",
+  "main": "app.js",
+ "scripts": {
+    "app": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+}
+
+}
