@@ -4,9 +4,10 @@
 
 | No de Práctica | Temas | Deadline |
 |---|---|---|
-| 1 | [Funciones](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Tareas/Practica1.md) | Viernes 15 de mayo 23:59 |
-| 2 | [Arreglos, Objetos y Funciones de Orden Superior](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Tareas/Practica2.md) | Martes 19 de mayo 23:59 |
-| 3 | [Asincronismo](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Tareas/Practica3.md) | Viernes 22 de mayo 23:59 |
+| 1 | [Funciones](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Practicas/Practica1.md) | Viernes 15 de mayo 23:59 |
+| 2 | [Arreglos, Objetos y Funciones de Orden Superior](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Practicas/Practica2.md) | Martes 19 de mayo 23:59 |
+| 3 | [Asincronismo](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Practicas/Practica3.md) | Viernes 22 de mayo 23:59 |
+| 4 | [Servidores Básicos con Node](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Practicas/Practica3.md) | Domingo 24 de mayo 23:59 |
 
 ## Notas de Clase 
 
