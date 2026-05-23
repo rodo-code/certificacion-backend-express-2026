@@ -49,7 +49,7 @@ Actualiza la lógica del servidor para que maneje la petición
 GET /words/{line}
 ```
 
-### Parámtros o Body
+### Parámetros o Body
 
 - Esta petición recibe un parámetro llamado `line` en la `url`.
 - `line` debe ser un número entero mayor a 0, sin embargo nota que un usuario podria no enviar un número entero en ese parámetro.
@@ -72,7 +72,7 @@ Actualiza la lógica del servidor para que maneje la petición
 GET /random-word
 ```
 
-### Parámtros o Body
+### Parámetros o Body
 
 - Esta petición no recibe ningún parámetro o body.
 
@@ -91,7 +91,7 @@ Actualiza la lógica del servidor para que maneje la petición
 PATCH /words/{line}
 ```
 
-### Parámtros o Body
+### Parámetros o Body
 
 - Esta petición recibe un parámetro llamado `line` en la `url`.
 - `line` debe ser un número entero mayor a 0, sin embargo nota que un usuario podria no enviar un número entero en ese parámetro.
@@ -120,7 +120,7 @@ Actualiza la lógica del servidor para que maneje la petición
 DELETE /words/{line}
 ```
 
-### Parámtros o Body
+### Parámetros o Body
 
 - Esta petición recibe un parámetro llamado `line` en la `url`.
 - `line` debe ser un número entero mayor a 0, sin embargo nota que un usuario podria no enviar un número entero en ese parámetro.
