@@ -1,9 +1,37 @@
-console.log("hola bola");
-import {addText,getContent} from "./fileService.js";
+import { addText, getContent } from "./fileService.js";
+import http from "http";
 
-async function main(){
-    await addText("hola bola");
-    const filecontent=await getContent();
-    console.log(filecontent);
-}
-main();
+const PORT = 3000;
+
+const server = http.createServer(async (req, res) => {
+    // All responses will be JSON
+    res.setHeader("Content-Type","application/json");
+    let urlParameters = req.url.split("/");
+    console.log(urlParameters);
+
+    // Handle the route localhost:3000/words
+    if(req.method == 'GET' && req.url == '/words'){
+        const content = await getContent();
+        const wordsArray=content.split("\n").filter(word=>word.trim()!=="");
+        res.statusCode = 200;
+        res.end(JSON.stringify(wordsArray));
+        return; // To finalize the execution of this request
+    }
+    if(req.method == 'POST' && urlParameters[1]=="addword" && urlParameters[2]){
+        await addText(urlParameters[2]);
+        res.statusCode = 200;
+        let message = `The word ${urlParameters[2]} was added to the file`;
+        res.end(JSON.stringify({
+            "message": message
+        }));
+        return;
+    }
+    res.statusCode = 404;
+    res.end(JSON.stringify({
+        "error": "Not method to handle the url"
+    }));
+});
+
+server.listen(PORT, () => {
+  console.log(`Servidor disponible en http://localhost:${PORT}`);
+});
