@@ -8,6 +8,13 @@
 | 2 | [Arreglos, Objetos y Funciones de Orden Superior](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Tareas/Practica2.md) | Martes 19 de mayo 23:59 |
 | 3 | [Asincronismo](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Tareas/Practica3.md) | Viernes 22 de mayo 23:59 |
 
+## Notas de Clase 
+
+| No de Clase | Fecha | Notas |
+|---|---|---|
+| 9 | 21 de mayo | [Notas y comandos básicos de Node](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Clase9-Node/Lab.md) |
+| 10 | 22 de mayo | [Uso de archivos, servidor HTTP y manejo básico de req/res](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Clase9-Node/notes.md) |
+
 ## Ejemplos de Clase
 
 | No de Clase | Fecha | Tema |
@@ -15,4 +22,6 @@
 | 3 | 13 de mayo | [Funciones](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Clase3-Funciones) |
 | 4 | 14 de mayo | [Objetos y Arreglos](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Clase4-Objetos-Arrays) |
 | 5 | 15 de mayo | [Funciones de Orden Superior](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Clase5-Funciones-Orden-Superior) |
-| 7 | 19 de mayo | [Funciones de Orden Superior](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Clase7-Asincronismo) |
+| 7 | 19 de mayo | [Asincronismo](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Clase7-Asincronismo) |
+| 9 | 21 de mayo | [Fundamentos Node](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Clase9-Node) |
+| 10 | 21 de mayo | [Servidor Básico Node](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Clase10-Servidor-Basico) |
