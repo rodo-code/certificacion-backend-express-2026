@@ -37,6 +37,7 @@ La petición recibirá un `body` en formato `JSON` bajo el siguiente formato:
 ### Resultado esperado
 
 - La petición debe agregar la palabra o palabras que describa el body en la propiedad `word`, al archivo `content.txt`.
+- La propiedad `"word"` consiste de solo un `string`, pero este `string` puede tener varias palabras como en el ejemplo.
 
 ## Ejercicio 2
 
