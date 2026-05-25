@@ -7,7 +7,7 @@
 | 1 | [Funciones](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Practicas/Practica1.md) | Viernes 15 de mayo 23:59 |
 | 2 | [Arreglos, Objetos y Funciones de Orden Superior](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Practicas/Practica2.md) | Martes 19 de mayo 23:59 |
 | 3 | [Asincronismo](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Practicas/Practica3.md) | Viernes 22 de mayo 23:59 |
-| 4 | [Servidores Básicos con Node](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Practicas/Practica4.md) | Domingo 24 de mayo 23:59 |
+| 4 | [Servidores Básicos con Node](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Practicas/Practica4.md) | Domingo 25 de mayo 23:59 |
 
 ## Notas de Clase 
 
@@ -37,4 +37,4 @@
 | 5 | 15 de mayo | [Funciones de Orden Superior](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Material/Controles/Preguntas-Cap-5.pdf) |
 | 6 | 18 de mayo | [Manejo de errores y módulos](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Material/Controles/Preguntas-Clase-8-10.pdf) |
 | 7 | 19 de mayo | [Asincronismo](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Material/Controles/Preguntas-Cap-11.pdf) |
-| 9 | 21 de mayo | [Fundamentos Node](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Material/Controles/Preguntas-Cap-20.pdf) |
+| 9 | 20 de mayo | [Fundamentos Node](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Material/Controles/Preguntas-Cap-20.pdf) |
