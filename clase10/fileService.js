@@ -18,3 +18,23 @@ export async function getContent(){
         throw error;
     }
 }
+export async function updateLine(lineNumber, newWord) {
+  const content = await getContent();
+  const lines = content.split("\n");
+  if (lines.length > 0 && lines[lines.length - 1] === "") {
+    lines.pop();
+  }
+  lines[lineNumber - 1] = newWord;
+
+  await fs.writeFile(FILE_PATH, lines.join("\n") + "\n");
+}
+export async function deleteLine(lineNumber) {
+  const content = await getContent();
+  const lines = content.split("\n");
+  if (lines.length > 0 && lines[lines.length - 1] === "") {
+    lines.pop();
+  }
+  lines.splice(lineNumber - 1, 1);
+
+  await fs.writeFile(FILE_PATH, lines.join("\n") + (lines.length > 0 ? "\n" : ""));
+}
