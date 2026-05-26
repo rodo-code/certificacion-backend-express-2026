@@ -142,3 +142,8 @@ dist
 .svelte-kit
 
 # End of https://www.toptal.com/developers/gitignore/api
+# carpeta personal
+practica5/
+
+# variables de entorno
+.env
