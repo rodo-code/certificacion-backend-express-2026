@@ -1,4 +1,4 @@
-import { addText, getContent } from "./fileService.js";
+import { addText, getContent, createContent } from "./fileService.js";
 import http from "http";
 
 const PORT = 3000;
@@ -27,6 +27,16 @@ const server = http.createServer(async (req, res) => {
         }));
         return;
     }
+
+    if(req.method == 'POST' && req.url == '/create-words'){
+        await createContent();
+        res.statusCode = 200;
+        res.end(JSON.stringify({
+            "message": "Content created succesfully"
+        }));
+        return;
+    }
+
     res.statusCode = 404;
     res.end(JSON.stringify({
         "error": "Not method to handle the url"

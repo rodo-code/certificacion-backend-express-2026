@@ -18,3 +18,12 @@ export async function getContent(){
         throw error;
     }
 }
+
+export async function createContent(){
+    try{
+        await fs.writeFile(FILE_PATH,"Abner\nAdrian\nAlejandro\nClaudia\n");
+    }catch(error){
+        console.log(`An error has ocurred during writing on file ${FILE_PATH}`);
+        throw error;
+    }
+}
