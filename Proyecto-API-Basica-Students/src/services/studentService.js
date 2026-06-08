@@ -88,12 +88,33 @@ export function deleteStudentLogicallyById(studentId){
     if(pos == -1){
         return {
             success: false,
-            message: `Not found student with id ${studentId} to update`
+            message: `Not found student with id ${studentId} to delete`
         };
     }
     studentList[pos].active = 0;
     return {
         success: true,
         data: studentList[pos]
+    };
+}
+
+export function deleteStudentPhysicallyById(studentId){
+    let pos = -1;
+    for(let i=0;i<studentList.length;i++){
+        if(studentList[i].id == studentId){
+            pos = i;
+            break;
+        }
+    }
+    if(pos == -1){
+        return {
+            success: false,
+            message: `Not found student with id ${studentId} to delete`
+        };
+    }
+    studentList.splice(pos,1);
+    return {
+        success: true,
+        message: `Student with id ${studentId} totally deleted successfully`
     };
 }
