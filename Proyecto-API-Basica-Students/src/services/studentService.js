@@ -97,3 +97,4 @@ export function deleteStudentLogicallyById(studentId){
         data: studentList[pos]
     };
 }
+//participacion
