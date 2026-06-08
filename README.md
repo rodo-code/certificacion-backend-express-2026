@@ -1,4 +1,4 @@
-# Certificación - Backend con Express.js
+# Certificación - Backend con Express.js y MongoDB
 
 ## Practicas
 
