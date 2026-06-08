@@ -5,7 +5,7 @@ import {
   replaceStudentById,
   getFilteredStudents,
   updateStudentById,
-  deleteStudentLogicallyById
+  deleteStudentById
 } from "../services/studentService.js";
 
 import { validateStudentBody } from "../utils/studentValidator.js";
