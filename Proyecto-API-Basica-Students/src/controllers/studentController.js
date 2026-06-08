@@ -1,69 +1,69 @@
 import {
   getAllStudents,
-  getStudentsByPassStatus,
   createStudent,
-  getStudentByPosition,
+  getStudentById,
+  replaceStudentById,
+  getFilteredStudents,
+  updateStudentById,
+  deleteStudentLogicallyById
 } from "../services/studentService.js";
 
-export function findStudents(req, res, next) {
-  const { pass } = req.query;
+import { validateStudentBody } from "../utils/studentValidator.js";
 
-  if (pass === undefined) {
+export function findStudents(req, res, next) {
+  const { pass, site } = req.query;
+
+  if (pass === undefined && site === undefined) {
     return res.success(200,"Get all students",getAllStudents());
   }
 
-  if (pass !== "true" && pass !== "false") {
+  if (pass !== undefined && pass !== "true" && pass !== "false") {
     const error = Error("Query parameter 'pass' must be 'true' or 'false'");
     error.statusCode = 400;
     return next(error);
   }
 
-  const passAsBoolean = pass === "true";
+  if (site !== undefined && site !== "LP" && site !== "CB" && site !== "SC"){
+    const error = Error("Query parameter 'site' must be 'LP' or 'CB' or 'SC'");
+    error.statusCode = 400;
+    return next(error);
+  }
 
-  return res.success(200,`Get students that has pass equals to ${passAsBoolean}`,getStudentsByPassStatus(passAsBoolean));
+  return res.success(200,`Filtered students by pass = ${pass} and site = ${site}`,getFilteredStudents(pass,site));
 }
 
 export function saveStudent(req, res, next) {
-  const { name, grade } = req.body;
 
-  if (!name || grade === undefined) {
-    const error = Error("Fields 'name' and 'grade' are required");
+  const studentValidator = validateStudentBody(req.body,true,true);
+
+  if(!studentValidator.validation){
+    const error = Error(studentValidator.message);
     error.statusCode = 400;
     return next(error);
   }
-
-  if (typeof name !== "string" || name.trim().length === 0) {
-    const error = Error("Field 'name' must be a non-empty string");
-    error.statusCode = 400;
-    return next(error);
-  }
-
-  if (typeof grade !== "number" || grade < 0 || grade > 100) {
-    const error = Error("Field 'grade' must be a number between 0 and 100");
-    error.statusCode = 400;
-    return next(error);
-  }
-
+  
   const newStudent = createStudent({
-    name: name.trim(),
-    grade,
+    id: Number(req.body.id),
+    name: req.body.name,
+    grade: req.body.grade,
+    site: req.body.site,
+    active: req.body.active
   });
-
   return res.success(201,"Student created succesfully", newStudent);
 }
 
-export function findStudentByPosition(req, res, next) {
-  const position = Number(req.params.pos);
+export function findStudentById(req, res, next) {
+  const id = Number(req.params.id);
 
-  console.log(`Retrieving information for student in position ${position}.`);
+  console.log(`Retrieving information for student with id ${id}.`);
 
-  if (!Number.isInteger(position) || position < 0) {
-    const error = Error("Position must be a valid positive integer");
+  if (!Number.isInteger(id) || id < 0) {
+    const error = Error("Id must be a valid positive integer");
     error.statusCode = 400;
     return next(error);
   }
 
-  const student = getStudentByPosition(position);
+  const student = getStudentById(id);
 
   if (!student) {
     const error = Error("Student not found");
@@ -71,5 +71,76 @@ export function findStudentByPosition(req, res, next) {
     return next(error);
   }
 
-  return res.success(200,`Student in pos ${position} succesfully retrieved`,student);
+  return res.success(200,`Student with id ${id} succesfully retrieved`,student);
+}
+
+export function replaceStudent(req, res, next){
+
+  const studentValidator = validateStudentBody(req.body,true,true);
+
+  if(!studentValidator.validation){
+    const error = Error(studentValidator.message);
+    error.statusCode = 400;
+    return next(error);
+  }
+
+  const studentId = req.body.id;
+  const newStudent = {
+    id: Number(req.body.id),
+    name: req.body.name,
+    grade: req.body.grade,
+    site: req.body.site,
+    active: req.body.active
+  };
+  const success = replaceStudentById(studentId, newStudent);
+  if(success){
+    return res.success(200,`Student with id ${studentId} succesfully totally updated`,newStudent);
+  }
+  else{
+    const error = Error(`Student with id ${studentId} in body was not found`);
+    error.statusCode = 404;
+    return next(error);
+  }
+}
+
+export function updateStudent(req, res, next){
+  const studentValidator = validateStudentBody(req.body,false,false);
+  if(!studentValidator.validation){
+    const error = Error(studentValidator.message);
+    error.statusCode = 400;
+    return next(error);
+  }
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id < 0) {
+    const error = Error("Id must be a valid positive integer");
+    error.statusCode = 400;
+    return next(error);
+  }
+  const updateStudentResponse = updateStudentById(id,req.body);
+  if(updateStudentResponse.success){
+    return res.success(200, `Student with id ${id} was updated succesfully`, updateStudentResponse.data);
+  }
+  else{
+    const error = Error(updateStudentResponse.message);
+    error.statusCode = 404;
+    return next(error);
+  }
+}
+
+export function deleteStudent(req, res, next){
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id < 0) {
+    const error = Error("Id must be a valid positive integer");
+    error.statusCode = 400;
+    return next(error);
+  }
+  const deleteStudentReponse = deleteStudentLogicallyById(id);
+  if(deleteStudentReponse.success){
+    return res.success(200, `Student with id ${id} was deleted succesfully`, deleteStudentReponse.data);
+  }
+  else{
+    const error = Error(deleteStudentReponse.message);
+    error.statusCode = 404;
+    return next(error);
+  }
 }
