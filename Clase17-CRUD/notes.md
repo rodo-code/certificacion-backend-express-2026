@@ -47,4 +47,4 @@ Modificaciones al proyecto actual:
 ### DELETE o borrado físico
 
 - Modifica la ruta anterior `DELETE /api/students/:id`
-- Para ahora hacer un borrado lógico (por puntos de participación).
+- Para ahora hacer un borrado fisico, es decir eliminar completamente un estudiante de la lista de estudiantes (por puntos de participación).

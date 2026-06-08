@@ -8,7 +8,7 @@
 | 2 | [Arreglos, Objetos y Funciones de Orden Superior](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Practicas/Practica2.md) | Martes 19 de mayo 23:59 |
 | 3 | [Asincronismo](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Practicas/Practica3.md) | Viernes 22 de mayo 23:59 |
 | 4 | [Servidores Básicos con Node](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Practicas/Practica4.md) | Lunes 25 de mayo 23:59 |
-| 5 | [REST API con Express y MongoDB](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Practicas/Practica5.md) | Lunes 25 de mayo 23:59 |
+| 5 | [REST API con Express y MongoDB](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Practicas/Practica5.md) | Jueves 11 de junio 23:59 |
 
 ## Notas de Clase 
 

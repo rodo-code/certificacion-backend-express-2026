@@ -1,11 +1,11 @@
-# Práctica 5 para el Miercoles 10 de junio
+# Práctica 5 para el Jueves 11 de junio
 ---
 
 ## Recomendaciones
 
 - Realizar los siguientes ejercicios usando el framework Express.js.
 - Utilice la base de datos NoSQL Mongo DB.
-- Puede usar odas las librerias que crea necesarias.
+- Puede usar otras las librerias que crea necesarias.
 - Utilice la arquitectura por capas expuesta en clases.
 - Utilice las buenas practicas del diseño de REST API expuesta en clases.
 - Utilice buenas prácticas de diseño e implementación de código.
