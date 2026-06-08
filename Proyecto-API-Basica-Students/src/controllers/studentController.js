@@ -144,3 +144,21 @@ export function deleteStudent(req, res, next){
     return next(error);
   }
 }
+
+export function deleteStudentPhysically(req, res, next){
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id < 0) {
+    const error = Error("Id must be a valid positive integer");
+    error.statusCode = 400;
+    return next(error);
+  }
+  const deleteStudentReponse = deleteStudentPhysicallyById(id);
+  if(deleteStudentReponse.success){
+    return res.success(200, `Student with id ${id} was deleted succesfully`, deleteStudentReponse.data);
+  }
+  else{
+    const error = Error(deleteStudentReponse.message);
+    error.statusCode = 404;
+    return next(error);
+  }
+}
