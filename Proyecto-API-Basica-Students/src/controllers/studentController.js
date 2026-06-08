@@ -5,7 +5,8 @@ import {
   replaceStudentById,
   getFilteredStudents,
   updateStudentById,
-  deleteStudentLogicallyById
+  deleteStudentLogicallyById,
+  deleteStudentPhysicallyById
 } from "../services/studentService.js";
 
 import { validateStudentBody } from "../utils/studentValidator.js";
@@ -134,7 +135,8 @@ export function deleteStudent(req, res, next){
     error.statusCode = 400;
     return next(error);
   }
-  const deleteStudentReponse = deleteStudentLogicallyById(id);
+  // const deleteStudentReponse = deleteStudentLogicallyById(id);
+  const deleteStudentReponse = deleteStudentPhysicallyById(id);
   if(deleteStudentReponse.success){
     return res.success(200, `Student with id ${id} was deleted succesfully`, deleteStudentReponse.data);
   }

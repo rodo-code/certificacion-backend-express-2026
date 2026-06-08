@@ -97,3 +97,20 @@ export function deleteStudentLogicallyById(studentId){
         data: studentList[pos]
     };
 }
+
+export function deleteStudentPhysicallyById(studentId){
+    const pos = studentList.findIndex(
+        student => student.id === studentId
+    );
+    if(pos === -1){
+        return {
+            success: false,
+            message: `Not found student with id ${studentId}`
+        };
+    }
+    const deletedStudent = studentList.splice(pos, 1)[0];
+    return {
+        success: true,
+        data: deletedStudent
+    };
+}
