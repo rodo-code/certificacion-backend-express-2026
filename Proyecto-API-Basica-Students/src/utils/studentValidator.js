@@ -1,8 +1,8 @@
 export function validateStudentBody(body, hasId, isComplete){
     const validProperties = ["id", "name", "grade", "site", "active"];
     if(body){
-        const studentId = body.id ?? 0;
-        if(hasId && studentId == 0){
+        const studentId = Number(body.id) ?? 0;
+        if(hasId && studentId <= 0){
             console.log("student id is not present in the body, but id is required");
             return {
                 "validation": false,

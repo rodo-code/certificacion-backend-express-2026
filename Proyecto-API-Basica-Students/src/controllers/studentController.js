@@ -4,7 +4,8 @@ import {
   getStudentById,
   replaceStudentById,
   getFilteredStudents,
-  updateStudentById
+  updateStudentById,
+  deleteStudentLogicallyById
 } from "../services/studentService.js";
 
 import { validateStudentBody } from "../utils/studentValidator.js";
@@ -40,8 +41,14 @@ export function saveStudent(req, res, next) {
     error.statusCode = 400;
     return next(error);
   }
-
-  const newStudent = createStudent(req.body);
+  
+  const newStudent = createStudent({
+    id: Number(req.body.id),
+    name: req.body.name,
+    grade: req.body.grade,
+    site: req.body.site,
+    active: req.body.active
+  });
   return res.success(201,"Student created succesfully", newStudent);
 }
 
@@ -78,9 +85,16 @@ export function replaceStudent(req, res, next){
   }
 
   const studentId = req.body.id;
-  const success = replaceStudentById(studentId, req.body);
+  const newStudent = {
+    id: Number(req.body.id),
+    name: req.body.name,
+    grade: req.body.grade,
+    site: req.body.site,
+    active: req.body.active
+  };
+  const success = replaceStudentById(studentId, newStudent);
   if(success){
-    return res.success(200,`Student with id ${studentId} succesfully totally updated`,req.body);
+    return res.success(200,`Student with id ${studentId} succesfully totally updated`,newStudent);
   }
   else{
     const error = Error(`Student with id ${studentId} in body was not found`);
@@ -90,7 +104,7 @@ export function replaceStudent(req, res, next){
 }
 
 export function updateStudent(req, res, next){
-  const studentValidator = validateStudentBody(req.body,true,false);
+  const studentValidator = validateStudentBody(req.body,false,false);
   if(!studentValidator.validation){
     const error = Error(studentValidator.message);
     error.statusCode = 400;
@@ -121,7 +135,7 @@ export function deleteStudent(req, res, next){
     return next(error);
   }
   const deleteStudentReponse = deleteStudentLogicallyById(id);
-  if(deleteStudent.success){
+  if(deleteStudentReponse.success){
     return res.success(200, `Student with id ${id} was deleted succesfully`, deleteStudentReponse.data);
   }
   else{
