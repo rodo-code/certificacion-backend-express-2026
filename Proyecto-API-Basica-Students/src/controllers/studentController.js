@@ -12,7 +12,7 @@ import {
 
 import { validateStudentBody } from "../utils/studentValidator.js";
 
-export function findStudents(req, res, next) {
+export async function findStudents(req, res, next) {
   const { pass, site, page, limit, sortBy, order } = req.query;
 
   if (pass !== undefined && pass !== "true" && pass !== "false") {
@@ -36,7 +36,7 @@ export function findStudents(req, res, next) {
     return next(error);
   }
 
-  let studentList = getFilteredStudents(pass,site);
+  let studentList = await getFilteredStudents(pass,site);
 
   if(sortBy !== undefined && order !== undefined){
     studentList = sortStudentsByField(studentList,sortBy, order);
