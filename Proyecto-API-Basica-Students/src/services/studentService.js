@@ -22,6 +22,22 @@ export function getFilteredStudents(pass,site){
     return filteredStudentList;
 }
 
+export function paginateStudentList(studentList, page, limit){
+    const startIndex = (page - 1)*limit;
+    const endIndex = page*limit;
+    return studentList.slice(startIndex, endIndex);
+}
+
+export function sortStudentsByField(studentList, sortBy, order){
+    if(order === 'asc'){
+        return studentList.sort((a,b) => a[sortBy]>b[sortBy] ? 1 : -1);
+    }
+    if(order === 'desc'){
+        return studentList.sort((a,b) => a[sortBy]<b[sortBy] ? 1 : -1);
+    }
+    return studentList;
+}
+
 export function createStudent(student){
     studentList.push(student);
     return student;
