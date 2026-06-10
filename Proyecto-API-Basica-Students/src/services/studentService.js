@@ -5,27 +5,31 @@ export function getAllStudents(){
     return studentList.filter ( student => student.active);
 }
 
-export function getFilteredStudents(pass,site){
-    let filteredStudentList = getAllStudents();
-    if(pass !== undefined){
-        let passAsBoolean = pass === "true";
-        filteredStudentList = filteredStudentList.filter( (student) => {
-            const hasPassed = student.grade >= 60;
-            return hasPassed === passAsBoolean;
-        });
+export async function getFilteredStudents(pass, site) {
+    const filter = {
+        active: true
+    };
+
+    if (site !== undefined) {
+        filter.site = site;
     }
-    if(site !== undefined){
-        filteredStudentList = filteredStudentList.filter( (student) => {
-            return student.site === site;
-        });
+
+    if (pass !== undefined) {
+        const passAsBoolean = pass === "true";
+        if (passAsBoolean) {
+            filter.grade = { $gte: 60 };
+        } else {
+            filter.grade = { $lt: 60 };
+        }
     }
-    return filteredStudentList;
+    return await Student.find(filter);
 }
 
-export function paginateStudentList(studentList, page, limit){
-    const startIndex = (page - 1)*limit;
-    const endIndex = page*limit;
-    return studentList.slice(startIndex, endIndex);
+export async function paginateStudentList(query, page, limit){
+    const skip = (page - 1) * limit;
+    return await query
+        .skip(skip)
+        .limit(Number(limit));
 }
 
 export function sortStudentsByField(studentList, sortBy, order){
