@@ -49,7 +49,7 @@ export function findStudents(req, res, next) {
   return res.success(200,`Filtered students by pass = ${pass} and site = ${site}`,studentList);
 }
 
-export function saveStudent(req, res, next) {
+export async function saveStudent(req, res, next) {
 
   const studentValidator = validateStudentBody(req.body,true,true);
 
@@ -59,8 +59,7 @@ export function saveStudent(req, res, next) {
     return next(error);
   }
   
-  const newStudent = createStudent({
-    id: Number(req.body.id),
+  const newStudent = await createStudent({
     name: req.body.name,
     grade: req.body.grade,
     site: req.body.site,

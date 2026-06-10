@@ -1,4 +1,4 @@
-import { studentList } from "../data/students.js";
+import { studentList, Student } from "../data/students.js";
 
 export function getAllStudents(){
     // Only active students
@@ -38,9 +38,9 @@ export function sortStudentsByField(studentList, sortBy, order){
     return studentList;
 }
 
-export function createStudent(student){
-    studentList.push(student);
-    return student;
+export async function createStudent(student){
+    const createdStudent = await Student.create(student);
+    return createdStudent;
 }
 
 export function getStudentById(id){
