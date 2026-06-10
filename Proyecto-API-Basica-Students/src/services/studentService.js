@@ -1,56 +1,66 @@
 import { studentList, Student } from "../data/students.js";
 
 export function getAllStudents(){
-    // Only active students
-    return studentList.filter ( student => student.active);
+    return studentList.filter(student => student.active);
 }
 
-export function getFilteredStudents(pass,site){
-    let filteredStudentList = getAllStudents();
+export async function getFilteredStudents(pass, site, page, limit, sortBy, order){
+    const query = { active: true };
+
     if(pass !== undefined){
-        let passAsBoolean = pass === "true";
-        filteredStudentList = filteredStudentList.filter( (student) => {
-            const hasPassed = student.grade >= 60;
-            return hasPassed === passAsBoolean;
-        });
+        query.grade = pass === "true" ? { $gte: 60 } : { $lt: 60 };
     }
+
     if(site !== undefined){
-        filteredStudentList = filteredStudentList.filter( (student) => {
-            return student.site === site;
-        });
+        query.site = site;
     }
-    return filteredStudentList;
+
+    let mongoQuery = Student.find(query);
+
+    if(sortBy !== undefined && order !== undefined){
+        const sortOrder = order === "desc" ? -1 : 1;
+        mongoQuery = mongoQuery.sort({ [sortBy]: sortOrder });
+    }
+
+    if(page !== undefined && limit !== undefined){
+        const pageNumber = Number(page);
+        const limitNumber = Number(limit);
+        const skip = (pageNumber - 1) * limitNumber;
+        mongoQuery = mongoQuery.skip(skip).limit(limitNumber);
+    }
+
+    return await mongoQuery.lean();
 }
 
 export function paginateStudentList(studentList, page, limit){
-    const startIndex = (page - 1)*limit;
-    const endIndex = page*limit;
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
     return studentList.slice(startIndex, endIndex);
 }
 
 export function sortStudentsByField(studentList, sortBy, order){
     if(order === 'asc'){
-        return studentList.sort((a,b) => a[sortBy]>b[sortBy] ? 1 : -1);
+        return studentList.sort((a,b) => a[sortBy] > b[sortBy] ? 1 : -1);
     }
     if(order === 'desc'){
-        return studentList.sort((a,b) => a[sortBy]<b[sortBy] ? 1 : -1);
+        return studentList.sort((a,b) => a[sortBy] < b[sortBy] ? 1 : -1);
     }
     return studentList;
 }
 
-export async function createStudent(student){
-    const createdStudent = await Student.create(student);
-    return createdStudent;
+export function createStudent(student){
+    const nextId = studentList.length > 0 ? Math.max(...studentList.map(s => s.id)) + 1 : 1;
+    const newStudent = { id: nextId, ...student };
+    studentList.push(newStudent);
+    return newStudent;
 }
 
 export function getStudentById(id){
-    const foundStudents = studentList.filter ( student => student.id === id);
+    const foundStudents = studentList.filter(student => student.id === id);
     if(foundStudents.length == 0){
         return null;
     }
-    else{
-        return foundStudents[0];
-    }
+    return foundStudents[0];
 }
 
 export function replaceStudentById(studentId, student){
@@ -61,11 +71,12 @@ export function replaceStudentById(studentId, student){
             break;
         }
     }
+    if(pos === -1) return false;
     studentList[pos] = student;
-    return pos != -1;
+    return true;
 }
 
-export function updateStudentById(studentId,body){
+export function updateStudentById(studentId, body){
     let pos = -1;
     for(let i=0;i<studentList.length;i++){
         if(studentList[i].id == studentId){

@@ -1,18 +1,15 @@
 import {
-  getAllStudents,
   createStudent,
   getStudentById,
   replaceStudentById,
   getFilteredStudents,
   updateStudentById,
-  deleteStudentLogicallyById,
-  paginateStudentList,
-  sortStudentsByField
+  deleteStudentLogicallyById
 } from "../services/studentService.js";
 
 import { validateStudentBody } from "../utils/studentValidator.js";
 
-export function findStudents(req, res, next) {
+export async function findStudents(req, res, next) {
   const { pass, site, page, limit, sortBy, order } = req.query;
 
   if (pass !== undefined && pass !== "true" && pass !== "false") {
@@ -30,28 +27,19 @@ export function findStudents(req, res, next) {
   const pageNumber = Number(page) || 1;
   const limitNumber = Number(limit) || 1;
   
-  if(pageNumber<=0 || limitNumber<=0){
+  if(pageNumber <= 0 || limitNumber <= 0){
     const error = Error("Pagination parameters are invalid");
     error.statusCode = 400;
     return next(error);
   }
 
-  let studentList = getFilteredStudents(pass,site);
+  const studentList = await getFilteredStudents(pass, site, pageNumber, limitNumber, sortBy, order);
 
-  if(sortBy !== undefined && order !== undefined){
-    studentList = sortStudentsByField(studentList,sortBy, order);
-  }
-
-  if(page !== undefined && limit !== undefined){
-    studentList = paginateStudentList(studentList,page,limit);
-  }
-
-  return res.success(200,`Filtered students by pass = ${pass} and site = ${site}`,studentList);
+  return res.success(200, `Filtered students by pass = ${pass} and site = ${site}`, studentList);
 }
 
 export async function saveStudent(req, res, next) {
-
-  const studentValidator = validateStudentBody(req.body,true,true);
+  const studentValidator = validateStudentBody(req.body, true, true);
 
   if(!studentValidator.validation){
     const error = Error(studentValidator.message);
@@ -65,7 +53,7 @@ export async function saveStudent(req, res, next) {
     site: req.body.site,
     active: req.body.active
   });
-  return res.success(201,"Student created succesfully", newStudent);
+  return res.success(201, "Student created succesfully", newStudent);
 }
 
 export function findStudentById(req, res, next) {
@@ -87,12 +75,11 @@ export function findStudentById(req, res, next) {
     return next(error);
   }
 
-  return res.success(200,`Student with id ${id} succesfully retrieved`,student);
+  return res.success(200, `Student with id ${id} succesfully retrieved`, student);
 }
 
 export function replaceStudent(req, res, next){
-
-  const studentValidator = validateStudentBody(req.body,true,true);
+  const studentValidator = validateStudentBody(req.body, true, true);
 
   if(!studentValidator.validation){
     const error = Error(studentValidator.message);
@@ -110,7 +97,7 @@ export function replaceStudent(req, res, next){
   };
   const success = replaceStudentById(studentId, newStudent);
   if(success){
-    return res.success(200,`Student with id ${studentId} succesfully totally updated`,newStudent);
+    return res.success(200, `Student with id ${studentId} succesfully totally updated`, newStudent);
   }
   else{
     const error = Error(`Student with id ${studentId} in body was not found`);
@@ -120,7 +107,7 @@ export function replaceStudent(req, res, next){
 }
 
 export function updateStudent(req, res, next){
-  const studentValidator = validateStudentBody(req.body,false,false);
+  const studentValidator = validateStudentBody(req.body, false, false);
   if(!studentValidator.validation){
     const error = Error(studentValidator.message);
     error.statusCode = 400;
@@ -132,7 +119,7 @@ export function updateStudent(req, res, next){
     error.statusCode = 400;
     return next(error);
   }
-  const updateStudentResponse = updateStudentById(id,req.body);
+  const updateStudentResponse = updateStudentById(id, req.body);
   if(updateStudentResponse.success){
     return res.success(200, `Student with id ${id} was updated succesfully`, updateStudentResponse.data);
   }
