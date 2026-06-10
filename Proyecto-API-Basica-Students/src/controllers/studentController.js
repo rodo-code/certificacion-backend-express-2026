@@ -1,18 +1,15 @@
 import {
-  getAllStudents,
   createStudent,
   getStudentById,
   replaceStudentById,
   getFilteredStudents,
   updateStudentById,
-  deleteStudentLogicallyById,
-  paginateStudentList,
-  sortStudentsByField
+  deleteStudentLogicallyById
 } from "../services/studentService.js";
 
 import { validateStudentBody } from "../utils/studentValidator.js";
 
-export function findStudents(req, res, next) {
+export async function findStudents(req, res, next) {
   const { pass, site, page, limit, sortBy, order } = req.query;
 
   if (pass !== undefined && pass !== "true" && pass !== "false") {
@@ -27,26 +24,22 @@ export function findStudents(req, res, next) {
     return next(error);
   }
 
-  const pageNumber = Number(page) || 1;
-  const limitNumber = Number(limit) || 1;
-  
-  if(pageNumber<=0 || limitNumber<=0){
-    const error = Error("Pagination parameters are invalid");
-    error.statusCode = 400;
+  if (page !== undefined || limit !== undefined) {
+    const pageNumber = Number(page) || 1;
+    const limitNumber = Number(limit) || 1;
+    if (pageNumber <= 0 || limitNumber <= 0) {
+      const error = Error("Pagination parameters are invalid");
+      error.statusCode = 400;
+      return next(error);
+    }
+  }
+
+  try {
+    const studentList = await getFilteredStudents({ pass, site, sortBy, order, page, limit });
+    return res.success(200, "Students retrieved successfully", studentList);
+  } catch (error) {
     return next(error);
   }
-
-  let studentList = getFilteredStudents(pass,site);
-
-  if(sortBy !== undefined && order !== undefined){
-    studentList = sortStudentsByField(studentList,sortBy, order);
-  }
-
-  if(page !== undefined && limit !== undefined){
-    studentList = paginateStudentList(studentList,page,limit);
-  }
-
-  return res.success(200,`Filtered students by pass = ${pass} and site = ${site}`,studentList);
 }
 
 export async function saveStudent(req, res, next) {
