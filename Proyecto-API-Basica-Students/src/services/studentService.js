@@ -1,41 +1,28 @@
 import { studentList, Student } from "../data/students.js";
 
-export function getAllStudents(){
-    // Only active students
-    return studentList.filter ( student => student.active);
-}
+export async function getFilteredStudents(pass, site, sortBy, order, page, limit) {
+    const filter = { active: true };
 
-export function getFilteredStudents(pass,site){
-    let filteredStudentList = getAllStudents();
-    if(pass !== undefined){
-        let passAsBoolean = pass === "true";
-        filteredStudentList = filteredStudentList.filter( (student) => {
-            const hasPassed = student.grade >= 60;
-            return hasPassed === passAsBoolean;
-        });
+    if (pass !== undefined) {
+        filter.grade = pass === "true" ? { $gte: 60 } : { $lt: 60 };
     }
-    if(site !== undefined){
-        filteredStudentList = filteredStudentList.filter( (student) => {
-            return student.site === site;
-        });
+    if (site !== undefined) {
+        filter.site = site;
     }
-    return filteredStudentList;
-}
 
-export function paginateStudentList(studentList, page, limit){
-    const startIndex = (page - 1)*limit;
-    const endIndex = page*limit;
-    return studentList.slice(startIndex, endIndex);
-}
+    let query = Student.find(filter);
 
-export function sortStudentsByField(studentList, sortBy, order){
-    if(order === 'asc'){
-        return studentList.sort((a,b) => a[sortBy]>b[sortBy] ? 1 : -1);
+    if (sortBy !== undefined && order !== undefined) {
+        query = query.sort({ [sortBy]: order === "asc" ? 1 : -1 });
     }
-    if(order === 'desc'){
-        return studentList.sort((a,b) => a[sortBy]<b[sortBy] ? 1 : -1);
+
+    if (page !== undefined && limit !== undefined) {
+        const pageNum = Number(page);
+        const limitNum = Number(limit);
+        query = query.skip((pageNum - 1) * limitNum).limit(limitNum);
     }
-    return studentList;
+
+    return await query;
 }
 
 export async function createStudent(student){

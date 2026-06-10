@@ -83,6 +83,9 @@ web_modules/
 .env.production.local
 .env.local
 
+# Allow .env for class project (professor needs to run without changes)
+!Proyecto-API-Basica-Students/.env
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
