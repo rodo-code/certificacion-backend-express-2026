@@ -1,12 +1,13 @@
 import { studentList, Student } from "../data/students.js";
 
-export function getAllStudents(){
+export async function getAllStudents(){
     // Only active students
-    return studentList.filter ( student => student.active);
+    // return studentList.filter ( student => student.active);
+    return await Student.find({ active: true });
 }
 
-export function getFilteredStudents(pass,site){
-    let filteredStudentList = getAllStudents();
+export async function getFilteredStudents(pass,site){
+    let filteredStudentList = await getAllStudents();
     if(pass !== undefined){
         let passAsBoolean = pass === "true";
         filteredStudentList = filteredStudentList.filter( (student) => {
