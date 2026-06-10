@@ -4,7 +4,6 @@ import studentRoutes from "./routes/studentRoutes.js";
 import { requestLogger } from "./middlewares/loggingMiddleware.js";
 import { errorHandler, responseFormatter } from "./middlewares/formatingMiddleware.js";
 import { connectDB } from "./data/mongoConnection.js";
-
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;

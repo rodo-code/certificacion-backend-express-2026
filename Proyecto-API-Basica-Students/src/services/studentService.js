@@ -5,6 +5,10 @@ export function getAllStudents(){
     return studentList.filter ( student => student.active);
 }
 
+export async function getAllStudentsByMongo() {
+  return await Student.find({ active: true });
+}
+
 export function getFilteredStudents(pass,site){
     let filteredStudentList = getAllStudents();
     if(pass !== undefined){
@@ -20,6 +24,22 @@ export function getFilteredStudents(pass,site){
         });
     }
     return filteredStudentList;
+}
+
+export async function getFilteredStudentsByMongo(pass, site) {
+  const filters = {active: true};
+  if (site !== undefined) {
+    filters.site = site;
+  }
+  if (pass !== undefined) {
+    if (pass === "true") {
+      filters.grade = { $gte: 60 };
+    }
+    if (pass === "false") {
+      filters.grade = { $lt: 60 };
+    }
+  }
+  return await Student.find(filters);
 }
 
 export function paginateStudentList(studentList, page, limit){
