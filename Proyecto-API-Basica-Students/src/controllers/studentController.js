@@ -3,16 +3,14 @@ import {
   createStudent,
   getStudentById,
   replaceStudentById,
-  getFilteredStudents,
+  buildStudentQuery,        // 👈 reemplaza getFilteredStudents
   updateStudentById,
   deleteStudentLogicallyById,
-  paginateStudentList,
-  sortStudentsByField
 } from "../services/studentService.js";
 
 import { validateStudentBody } from "../utils/studentValidator.js";
 
-export function findStudents(req, res, next) {
+export async function findStudents(req, res, next) {
   const { pass, site, page, limit, sortBy, order } = req.query;
 
   if (pass !== undefined && pass !== "true" && pass !== "false") {
@@ -21,7 +19,7 @@ export function findStudents(req, res, next) {
     return next(error);
   }
 
-  if (site !== undefined && site !== "LP" && site !== "CB" && site !== "SC"){
+  if (site !== undefined && site !== "LP" && site !== "CB" && site !== "SC") {
     const error = Error("Query parameter 'site' must be 'LP' or 'CB' or 'SC'");
     error.statusCode = 400;
     return next(error);
@@ -29,24 +27,36 @@ export function findStudents(req, res, next) {
 
   const pageNumber = Number(page) || 1;
   const limitNumber = Number(limit) || 1;
-  
-  if(pageNumber<=0 || limitNumber<=0){
+
+  if (pageNumber <= 0 || limitNumber <= 0) {
     const error = Error("Pagination parameters are invalid");
     error.statusCode = 400;
     return next(error);
   }
 
-  let studentList = getFilteredStudents(pass,site);
+  try {
+    let studentQuery = buildStudentQuery(pass, site); // Query sin ejecutar
 
-  if(sortBy !== undefined && order !== undefined){
-    studentList = sortStudentsByField(studentList,sortBy, order);
+    if (sortBy !== undefined && order !== undefined) {
+      const sortOrder = order === "desc" ? -1 : 1;
+      studentQuery = studentQuery.sort({ [sortBy]: sortOrder });
+    }
+
+    if (page !== undefined && limit !== undefined) {
+      const skip = (pageNumber - 1) * limitNumber;
+      studentQuery = studentQuery.skip(skip).limit(limitNumber);
+    }
+
+    const studentList = await studentQuery.exec(); // Ejecuta UNA sola vez
+
+    return res.success(
+      200,
+      `Filtered students by pass = ${pass} and site = ${site}`,
+      studentList
+    );
+  } catch (err) {
+    next(err);
   }
-
-  if(page !== undefined && limit !== undefined){
-    studentList = paginateStudentList(studentList,page,limit);
-  }
-
-  return res.success(200,`Filtered students by pass = ${pass} and site = ${site}`,studentList);
 }
 
 export async function saveStudent(req, res, next) {
