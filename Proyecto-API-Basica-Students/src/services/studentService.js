@@ -1,25 +1,27 @@
 import { studentList, Student } from "../data/students.js";
 
-export function getAllStudents(){
+export async function getAllStudents(){
     // Only active students
-    return studentList.filter ( student => student.active);
+    return await studentList.find( student => student.active);
 }
 
-export function getFilteredStudents(pass,site){
-    let filteredStudentList = getAllStudents();
-    if(pass !== undefined){
-        let passAsBoolean = pass === "true";
-        filteredStudentList = filteredStudentList.filter( (student) => {
-            const hasPassed = student.grade >= 60;
-            return hasPassed === passAsBoolean;
-        });
+export async function getFilteredStudents(pass, site) {
+    const query = {
+        active: true
+    };
+
+    if (pass !== undefined) {
+        const passAsBoolean = (pass === "true");
+        if (passAsBoolean) 
+            query.grade = { $gte: 60 };
+        else 
+            query.grade = { $lt: 60 };
     }
-    if(site !== undefined){
-        filteredStudentList = filteredStudentList.filter( (student) => {
-            return student.site === site;
-        });
-    }
-    return filteredStudentList;
+
+    if (site !== undefined) 
+        query.site = site;
+
+    return await Student.find(query);
 }
 
 export function paginateStudentList(studentList, page, limit){
