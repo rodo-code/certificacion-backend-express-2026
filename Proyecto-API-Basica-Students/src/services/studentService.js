@@ -1,12 +1,13 @@
 import { studentList, Student } from "../data/students.js";
 
-export function getAllStudents(){
+export async function getAllStudents(){
     // Only active students
-    return studentList.filter ( student => student.active);
+    const studentList = await Student.find();
+    return studentList;
 }
 
-export function getFilteredStudents(pass,site){
-    let filteredStudentList = getAllStudents();
+export async function getFilteredStudents(pass,site){
+    let filteredStudentList = await getAllStudents();
     if(pass !== undefined){
         let passAsBoolean = pass === "true";
         filteredStudentList = filteredStudentList.filter( (student) => {
@@ -43,73 +44,23 @@ export async function createStudent(student){
     return createdStudent;
 }
 
-export function getStudentById(id){
-    const foundStudents = studentList.filter ( student => student.id === id);
-    if(foundStudents.length == 0){
-        return null;
-    }
-    else{
-        return foundStudents[0];
-    }
+export async function getStudentById(id){
+    const foundStudent = await Student.findById(id);
+    return foundStudent;
 }
 
-export function replaceStudentById(studentId, student){
-    let pos = -1;
-    for(let i=0;i<studentList.length;i++){
-        if(studentList[i].id == studentId){
-            pos = i;
-            break;
-        }
-    }
-    studentList[pos] = student;
-    return pos != -1;
+export async function replaceStudentById(studentId, student){
+
+    const replacedStudent = await Student.findByIdAndUpdate(studentId, student, {new: true} );
+    return replacedStudent;
 }
 
-export function updateStudentById(studentId,body){
-    let pos = -1;
-    for(let i=0;i<studentList.length;i++){
-        if(studentList[i].id == studentId){
-            pos = i;
-            break;
-        }
-    }
-    if(pos == -1){
-        return {
-            success: false,
-            message: `Not found student with id ${studentId} to update`
-        };
-    }
-    let newStudentInfo = {
-        id: studentId,
-        name: body.name ?? studentList[pos].name,
-        site: body.site ?? studentList[pos].site,
-        grade: body.grade ?? studentList[pos].grade,
-        active: body.active ?? studentList[pos].active
-    };
-    studentList[pos] = newStudentInfo;
-    return {
-        success: true,
-        data: newStudentInfo
-    };
+export async function updateStudentById(studentId,body){
+    const updatedStudent = await Student.findByIdAndUpdate(studentId,body,{new: true});
+    return updatedStudent;
 }
 
-export function deleteStudentLogicallyById(studentId){
-    let pos = -1;
-    for(let i=0;i<studentList.length;i++){
-        if(studentList[i].id == studentId){
-            pos = i;
-            break;
-        }
-    }
-    if(pos == -1){
-        return {
-            success: false,
-            message: `Not found student with id ${studentId} to update`
-        };
-    }
-    studentList[pos].active = 0;
-    return {
-        success: true,
-        data: studentList[pos]
-    };
+export async function deleteStudentById(studentId){
+    const deletedStudent = await Student.findByIdAndDelete(studentId);
+    return deletedStudent;
 }

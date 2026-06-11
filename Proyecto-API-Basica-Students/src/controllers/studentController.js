@@ -5,14 +5,14 @@ import {
   replaceStudentById,
   getFilteredStudents,
   updateStudentById,
-  deleteStudentLogicallyById,
+  deleteStudentById,
   paginateStudentList,
   sortStudentsByField
 } from "../services/studentService.js";
 
 import { validateStudentBody } from "../utils/studentValidator.js";
 
-export function findStudents(req, res, next) {
+export async function findStudents(req, res, next) {
   const { pass, site, page, limit, sortBy, order } = req.query;
 
   if (pass !== undefined && pass !== "true" && pass !== "false") {
@@ -36,7 +36,7 @@ export function findStudents(req, res, next) {
     return next(error);
   }
 
-  let studentList = getFilteredStudents(pass,site);
+  let studentList = await getFilteredStudents(pass,site);
 
   if(sortBy !== undefined && order !== undefined){
     studentList = sortStudentsByField(studentList,sortBy, order);
@@ -68,18 +68,12 @@ export async function saveStudent(req, res, next) {
   return res.success(201,"Student created succesfully", newStudent);
 }
 
-export function findStudentById(req, res, next) {
-  const id = Number(req.params.id);
+export async function findStudentById(req, res, next) {
+  const id = req.params.id;
 
   console.log(`Retrieving information for student with id ${id}.`);
 
-  if (!Number.isInteger(id) || id < 0) {
-    const error = Error("Id must be a valid positive integer");
-    error.statusCode = 400;
-    return next(error);
-  }
-
-  const student = getStudentById(id);
+  const student = await getStudentById(id);
 
   if (!student) {
     const error = Error("Student not found");
@@ -90,7 +84,7 @@ export function findStudentById(req, res, next) {
   return res.success(200,`Student with id ${id} succesfully retrieved`,student);
 }
 
-export function replaceStudent(req, res, next){
+export async function replaceStudent(req, res, next){
 
   const studentValidator = validateStudentBody(req.body,true,true);
 
@@ -102,14 +96,13 @@ export function replaceStudent(req, res, next){
 
   const studentId = req.body.id;
   const newStudent = {
-    id: Number(req.body.id),
     name: req.body.name,
     grade: req.body.grade,
     site: req.body.site,
     active: req.body.active
   };
-  const success = replaceStudentById(studentId, newStudent);
-  if(success){
+  const replacedStudent = await replaceStudentById(studentId, newStudent);
+  if(replaceStudent){
     return res.success(200,`Student with id ${studentId} succesfully totally updated`,newStudent);
   }
   else{
@@ -119,43 +112,33 @@ export function replaceStudent(req, res, next){
   }
 }
 
-export function updateStudent(req, res, next){
+export async function updateStudent(req, res, next){
   const studentValidator = validateStudentBody(req.body,false,false);
   if(!studentValidator.validation){
     const error = Error(studentValidator.message);
     error.statusCode = 400;
     return next(error);
   }
-  const id = Number(req.params.id);
-  if (!Number.isInteger(id) || id < 0) {
-    const error = Error("Id must be a valid positive integer");
-    error.statusCode = 400;
-    return next(error);
-  }
-  const updateStudentResponse = updateStudentById(id,req.body);
-  if(updateStudentResponse.success){
-    return res.success(200, `Student with id ${id} was updated succesfully`, updateStudentResponse.data);
+  const id = req.params.id;
+  const updateStudentResponse = await updateStudentById(id,req.body);
+  if(updateStudentResponse){
+    return res.success(200, `Student with id ${id} was updated succesfully`, updateStudentResponse);
   }
   else{
-    const error = Error(updateStudentResponse.message);
+    const error = Error("Id not found for update");
     error.statusCode = 404;
     return next(error);
   }
 }
 
-export function deleteStudent(req, res, next){
-  const id = Number(req.params.id);
-  if (!Number.isInteger(id) || id < 0) {
-    const error = Error("Id must be a valid positive integer");
-    error.statusCode = 400;
-    return next(error);
-  }
-  const deleteStudentReponse = deleteStudentLogicallyById(id);
-  if(deleteStudentReponse.success){
-    return res.success(200, `Student with id ${id} was deleted succesfully`, deleteStudentReponse.data);
+export async function deleteStudent(req, res, next){
+  const id = req.params.id;
+  const deleteStudentReponse = await deleteStudentById(id);
+  if(deleteStudentReponse){
+    return res.success(200, `Student with id ${id} was deleted succesfully`, deleteStudentReponse);
   }
   else{
-    const error = Error(deleteStudentReponse.message);
+    const error = Error("id not found for delete");
     error.statusCode = 404;
     return next(error);
   }

@@ -1,8 +1,8 @@
 export function validateStudentBody(body, hasId, isComplete){
     const validProperties = ["id", "name", "grade", "site", "active"];
     if(body){
-        const studentId = Number(body.id) ?? 0;
-        if(hasId && studentId <= 0){
+        const studentId = body.id
+        if(hasId && studentId==undefined){
             console.log("student id is not present in the body, but id is required");
             return {
                 "validation": false,
@@ -45,8 +45,6 @@ function validateBodyCorrectness(body,validPropertiesInBody){
         console.log(`Checking property called ${property}`);
         switch(property){
             case "id":
-                validationResult = validateId(body.id);
-                if(!validationResult.validation) return validationResult;
                 break;
             case "name":
                 validationResult = validateName(body.name);
