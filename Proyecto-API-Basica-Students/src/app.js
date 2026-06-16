@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import studentRoutes from "./routes/studentRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 import { requestLogger } from "./middlewares/loggingMiddleware.js";
 import { errorHandler, responseFormatter } from "./middlewares/formatingMiddleware.js";
 import { connectDB } from "./data/mongoConnection.js";
@@ -24,6 +25,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/students", studentRoutes);
+
+app.use("/api/users", userRoutes);
 
 app.use(errorHandler);
 
