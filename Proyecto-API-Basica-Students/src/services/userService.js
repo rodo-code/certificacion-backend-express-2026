@@ -45,3 +45,8 @@ export async function checkUserInDB(username, password) {
         token
     };
 }
+
+export async function getExistingUser(username){
+    const userFound = await User.find({username});
+    return userFound;
+}
