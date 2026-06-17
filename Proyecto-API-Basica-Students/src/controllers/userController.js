@@ -5,35 +5,33 @@ import {
 } from "../utils/userValidator.js";
 export async function registerUser(req, res, next){
     const {username, password, role} = req.body;
-    const validationError = validateRegisterUser(
-      username,
-      password,
-      role
-    );
+    const validationError = validateRegisterUser(username,password,role);
+
     if(validationError){
       const error = Error(validationError);
       error.statusCode = 400;
       return next(error);
     }
-    const createdUser = await saveUserInDB(
-      username,
-      password,
-      role
-    );
-    return res.success(
-      200,
-      "User created succesfully",
-      createdUser
-    );
+
+    const createdUser = await saveUserInDB(username,password,role);
+
+    return res.success(200,"User created succesfully",createdUser);
 }
 
 export async function loginUser(req, res, next){
     const {username, password} = req.body;
+    const validationError = validateLoginUser(username,password);
+    if(validationError){
+      const error = Error(validationError);
+      error.statusCode = 400;
+      return next(error);
+    }
     const responseLogin = await checkUserInDB(username,password);
-    if(responseLogin == null){
+    if(responseLogin==null){
         const error = Error("Invalid credentials");
         error.statusCode = 401;
         return next(error);
     }
-    return res.success(200,`Succesful Login`,responseLogin);
+
+    return res.success(200,"Succesful Login",responseLogin);
 }
