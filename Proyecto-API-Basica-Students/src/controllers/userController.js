@@ -1,9 +1,17 @@
-import { saveUserInDB, checkUserInDB } from "../services/userService.js";
+import { saveUserInDB, checkUserInDB, findUserByUsername } from "../services/userService.js";
 
 export async function registerUser(req, res, next){
     const {username, password, role} = req.body;
+
+    const existingUser = await findUserByUsername(username);
+    if(existingUser){
+        const error = Error("Username already exists");
+        error.statusCode = 409;
+        return next(error);
+    }
+
     const createdUser = await saveUserInDB(username,password,role);
-    return res.success(200,`User created succesfully`,createdUser);
+    return res.success(201,`User created succesfully`,createdUser);
 }
 
 export async function loginUser(req, res, next){
