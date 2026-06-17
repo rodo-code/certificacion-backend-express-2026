@@ -2,33 +2,48 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "../data/users.js";
 
-export async function saveUserInDB(username, password, role){
-    const hashedPassword = await bcrypt.hash(password,10);
+export async function saveUserInDB(username, password, role) {
+
+    const existingUser = await User.findOne({ username });
+
+    if (existingUser) {
+        const error = new Error("Username already exists");
+        error.statusCode = 409; 
+        throw error;
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = await User.create({
         username,
         password: hashedPassword,
         role
     });
-    const responseUser = {
+
+    return {
         id: newUser._id,
         username: newUser.username,
         role: newUser.role
     };
-    return responseUser;
 }
 
 export async function checkUserInDB(username, password) {
-    const usersFound = await User.find({username});
-    const userInDB = usersFound[0];
-    if(userInDB == null){ // If username does not exist in DB
+
+    const userInDB = await User.findOne({ username });
+
+    if (userInDB == null) {
         return null;
     }
-    // Check if passowrd match
-    const isPasswordCorrect = await bcrypt.compare(password,userInDB.password);
-    if(!isPasswordCorrect){
+
+    const isPasswordCorrect = await bcrypt.compare(
+        password,
+        userInDB.password
+    );
+
+    if (!isPasswordCorrect) {
         return null;
     }
-    // Generate token
+
     const token = jwt.sign(
         {
             id: userInDB._id,
@@ -40,6 +55,7 @@ export async function checkUserInDB(username, password) {
             expiresIn: "1h"
         }
     );
+
     return {
         username: userInDB.username,
         token
