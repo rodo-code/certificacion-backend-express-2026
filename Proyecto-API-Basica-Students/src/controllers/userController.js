@@ -1,9 +1,30 @@
 import { saveUserInDB, checkUserInDB } from "../services/userService.js";
-
+import {
+  validateRegisterUser,
+  validateLoginUser
+} from "../utils/userValidator.js";
 export async function registerUser(req, res, next){
     const {username, password, role} = req.body;
-    const createdUser = await saveUserInDB(username,password,role);
-    return res.success(200,`User created succesfully`,createdUser);
+    const validationError = validateRegisterUser(
+      username,
+      password,
+      role
+    );
+    if(validationError){
+      const error = Error(validationError);
+      error.statusCode = 400;
+      return next(error);
+    }
+    const createdUser = await saveUserInDB(
+      username,
+      password,
+      role
+    );
+    return res.success(
+      200,
+      "User created succesfully",
+      createdUser
+    );
 }
 
 export async function loginUser(req, res, next){
