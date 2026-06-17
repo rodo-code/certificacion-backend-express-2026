@@ -48,13 +48,17 @@ export async function saveStudent(req, res, next) {
     return next(error);
   }
   
-  const newStudent = await createStudent({
-    name: req.body.name,
-    grade: req.body.grade,
-    site: req.body.site,
-    active: req.body.active
-  });
-  return res.success(201,"Student created succesfully", newStudent);
+  try {
+    const newStudent = await createStudent({
+      name: req.body.name,
+      grade: req.body.grade,
+      site: req.body.site,
+      active: req.body.active
+    });
+    return res.success(201,"Student created succesfully", newStudent);
+  } catch(error) {
+    return next(error);
+  }
 }
 
 export function findStudentById(req, res, next) {

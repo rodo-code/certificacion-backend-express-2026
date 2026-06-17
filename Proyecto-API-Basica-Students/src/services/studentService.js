@@ -48,7 +48,20 @@ export function sortStudentsByField(studentList, sortBy, order){
     return studentList;
 }
 
+export async function getStudentByName(name){
+    const foundStudent = await Student.findOne({ name: name });
+    return foundStudent;
+}
+
 export async function createStudent(student){
+    // Validar que no exista un estudiante con el mismo nombre
+    const existingStudent = await getStudentByName(student.name);
+    if(existingStudent){
+        const error = Error(`A student with the name '${student.name}' already exists`);
+        error.statusCode = 409; // Conflict
+        throw error;
+    }
+    
     const createdStudent = await Student.create(student);
     return createdStudent;
 }
