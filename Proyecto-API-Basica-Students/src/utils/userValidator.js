@@ -1,5 +1,5 @@
 export function validateUserBody(body){
-    const validProperties = ["username", "password"];
+    const validProperties = ["username", "password", "role"];
 
     if(!body){
         return {
@@ -10,7 +10,7 @@ export function validateUserBody(body){
 
     const validPropertiesInBody = validProperties.filter( property => body.hasOwnProperty(property));
 
-    if(validPropertiesInBody.length !== validProperties.length){
+    if(!body.hasOwnProperty("username") || !body.hasOwnProperty("password")){
         return {
             validation: false,
             message: "Body is not complete for use user API"

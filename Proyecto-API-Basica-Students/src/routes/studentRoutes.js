@@ -9,11 +9,13 @@ import {
   deleteStudent
 } from "../controllers/studentController.js";
 
+import { authenticate } from "../middlewares/authenticationMiddleware.js";
+
 const studentRoutes = Router();
 
 studentRoutes.get("/", findStudents);
 
-studentRoutes.post("/", saveStudent);
+studentRoutes.post("/", authenticate, saveStudent);
 
 studentRoutes.put("/", replaceStudent);
 

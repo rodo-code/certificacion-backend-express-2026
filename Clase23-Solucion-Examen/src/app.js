@@ -1,7 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import studentRoutes from "./routes/studentRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
 import { requestLogger } from "./middlewares/loggingMiddleware.js";
 import { errorHandler, responseFormatter } from "./middlewares/formatingMiddleware.js";
 import { connectDB } from "./data/mongoConnection.js";
@@ -20,14 +19,7 @@ app.use(requestLogger);
 
 app.use(responseFormatter);
 
-app.get("/", (req, res) => {
-  return res.status(200).send("<h1>Hello from Express</h1>");
-});
-
-app.use("/api/students", studentRoutes);
-app.use("/api/users", userRoutes);
-
-app.use("/api/users", userRoutes);
+app.use("/api/products", productRoutes);
 
 app.use(errorHandler);
 
