@@ -45,3 +45,10 @@ export async function checkUserInDB(username, password) {
         token
     };
 }
+
+export const checkUsernameinDb = (username) => {
+    const user = User.findOne({
+        username
+    })
+    return !!user;
+}
