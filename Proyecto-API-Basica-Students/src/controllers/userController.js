@@ -1,9 +1,13 @@
 import { saveUserInDB, checkUserInDB } from "../services/userService.js";
 
 export async function registerUser(req, res, next){
-    const {username, password, role} = req.body;
-    const createdUser = await saveUserInDB(username,password,role);
-    return res.success(200,`User created succesfully`,createdUser);
+    try{
+        const {username, password, role} = req.body;
+        const createdUser = await saveUserInDB(username,password,role);
+        return res.success(200,`User created succesfully`,createdUser);
+    }catch(error){
+        return next(error);
+    }
 }
 
 export async function loginUser(req, res, next){
