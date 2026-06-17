@@ -3,6 +3,11 @@ import { saveUserInDB, checkUserInDB } from "../services/userService.js";
 export async function registerUser(req, res, next){
     const {username, password, role} = req.body;
     const createdUser = await saveUserInDB(username,password,role);
+    if(createdUser == null){
+        const error = Error("Username already exists, please choose other username");
+        error.statusCode = 400;
+        return next(error);
+    }
     return res.success(200,`User created succesfully`,createdUser);
 }
 
