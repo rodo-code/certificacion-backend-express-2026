@@ -3,6 +3,11 @@ import jwt from "jsonwebtoken";
 import { User } from "../data/users.js";
 
 export async function saveUserInDB(username, password, role){
+    const userInDB = await User.findOne({ username });
+    if(userInDB !== null){
+        return null;
+    }
+
     const hashedPassword = await bcrypt.hash(password,10);
     const newUser = await User.create({
         username,
@@ -20,15 +25,13 @@ export async function saveUserInDB(username, password, role){
 export async function checkUserInDB(username, password) {
     const usersFound = await User.find({username});
     const userInDB = usersFound[0];
-    if(userInDB == null){ // If username does not exist in DB
+    if(userInDB == null){
         return null;
     }
-    // Check if passowrd match
     const isPasswordCorrect = await bcrypt.compare(password,userInDB.password);
     if(!isPasswordCorrect){
         return null;
     }
-    // Generate token
     const token = jwt.sign(
         {
             id: userInDB._id,
