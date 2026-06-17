@@ -3,6 +3,14 @@ import jwt from "jsonwebtoken";
 import { User } from "../data/users.js";
 
 export async function saveUserInDB(username, password, role){
+
+    const userExists = await User.findOne({ username });
+    if (userExists){
+        const error = Error(`Username ${username} already exists`);
+        error.status = 400;
+        throw error;
+    }
+
     const hashedPassword = await bcrypt.hash(password,10);
     const newUser = await User.create({
         username,
