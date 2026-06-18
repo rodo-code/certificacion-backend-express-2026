@@ -45,6 +45,31 @@ paths:
         "400":
           description: Datos inválidos
 
+  /students:
+    put:
+      summary: Actualizar uno o varios estudiantes
+      tags:
+        - Students
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/UpdateStudentInput"
+      responses:
+        "200":
+          description: Estudiantes actualizados correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentListResponse"
+        "400":
+          description: Datos inválidos
+
   /api/students/{id}:
     get:
       summary: Obtener un estudiante por ID
