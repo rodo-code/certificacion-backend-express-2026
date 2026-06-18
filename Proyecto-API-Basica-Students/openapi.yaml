@@ -1,0 +1,369 @@
+openapi: 3.0.3
+info:
+  title: Students API
+  description: API REST para gestión de estudiantes
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000/api
+    description: Servidor de desarrollo
+
+tags:
+  - name: Students
+    description: Operaciones sobre estudiantes
+
+paths:
+  /students:
+    get:
+      tags:
+        - Students
+      summary: Obtener lista de estudiantes filtrada
+      parameters:
+        - name: pass
+          in: query
+          schema:
+            type: string
+            enum: [true, false]
+        - name: site
+          in: query
+          schema:
+            type: string
+            enum: [LP, CB, SC]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+        - name: order
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+      responses:
+        '200':
+          description: Lista de estudiantes filtrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+    post:
+      tags:
+        - Students
+      summary: Crear un nuevo estudiante
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentBody'
+      responses:
+        '201':
+          description: Estudiante creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+    put:
+      tags:
+        - Students
+      summary: Reemplazar completamente un estudiante existente
+      description: >
+        Reemplaza **todos** los campos de un estudiante existente con los datos
+        proporcionados en el cuerpo de la petición. Requiere todos los campos
+        obligatorios: `id`, `name`, `grade`, `site` y `active`.
+        El estudiante a reemplazar se identifica por el campo `id` del body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentBody'
+            example:
+              id: 3
+              name: "Carlos Mamani"
+              grade: 75
+              site: "LP"
+              active: 1
+      responses:
+        '200':
+          description: Estudiante reemplazado exitosamente
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Student'
+              example:
+                success: true
+                message: "Student with id 3 succesfully totally updated"
+                data:
+                  id: 3
+                  name: "Carlos Mamani"
+                  grade: 75
+                  site: "LP"
+                  active: 1
+        '400':
+          description: El cuerpo de la petición es inválido o incompleto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                bodyIncompleto:
+                  summary: Faltan campos obligatorios
+                  value:
+                    success: false
+                    message: "Body is not complete for use student API"
+                    errors: null
+                idInvalido:
+                  summary: El id no es un entero positivo válido
+                  value:
+                    success: false
+                    message: "id is invalid"
+                    errors: null
+                gradeInvalido:
+                  summary: La nota está fuera del rango 0-100
+                  value:
+                    success: false
+                    message: "grade is invalid"
+                    errors: null
+                siteInvalido:
+                  summary: La sede no es LP, CB ni SC
+                  value:
+                    success: false
+                    message: "site is invalid"
+                    errors: null
+        '404':
+          description: No existe un estudiante con el id proporcionado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                message: "Student with id 3 in body was not found"
+                errors: null
+
+  /students/{id}:
+    get:
+      tags:
+        - Students
+      summary: Obtener un estudiante por ID
+      parameters:
+        - $ref: '#/components/parameters/StudentId'
+      responses:
+        '200':
+          description: Estudiante encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    patch:
+      tags:
+        - Students
+      summary: Actualizar parcialmente un estudiante
+      parameters:
+        - $ref: '#/components/parameters/StudentId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentPartialBody'
+      responses:
+        '200':
+          description: Estudiante actualizado parcialmente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      tags:
+        - Students
+      summary: Eliminar lógicamente un estudiante
+      parameters:
+        - $ref: '#/components/parameters/StudentId'
+      responses:
+        '200':
+          description: Estudiante desactivado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  parameters:
+    StudentId:
+      name: id
+      in: path
+      required: true
+      description: ID numérico positivo del estudiante
+      schema:
+        type: integer
+        minimum: 1
+      example: 3
+
+  schemas:
+    Student:
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          description: Identificador único del estudiante
+          example: 3
+        name:
+          type: string
+          description: Nombre completo del estudiante
+          example: "Carlos Mamani"
+        grade:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Calificación del estudiante (0-100)
+          example: 75
+        site:
+          type: string
+          enum: [LP, CB, SC]
+          description: Sede donde estudia (LP=La Paz, CB=Cochabamba, SC=Santa Cruz)
+          example: "LP"
+        active:
+          type: integer
+          enum: [0, 1]
+          description: Estado del estudiante (1=activo, 0=inactivo)
+          example: 1
+
+    StudentBody:
+      type: object
+      required:
+        - id
+        - name
+        - grade
+        - site
+        - active
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          description: Identificador único del estudiante
+          example: 3
+        name:
+          type: string
+          description: Nombre completo del estudiante
+          example: "Carlos Mamani"
+        grade:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Calificación del estudiante (0-100)
+          example: 75
+        site:
+          type: string
+          enum: [LP, CB, SC]
+          description: Sede donde estudia (LP=La Paz, CB=Cochabamba, SC=Santa Cruz)
+          example: "LP"
+        active:
+          type: integer
+          enum: [0, 1]
+          description: Estado del estudiante (1=activo, 0=inactivo)
+          example: 1
+
+    StudentPartialBody:
+      type: object
+      minProperties: 1
+      properties:
+        name:
+          type: string
+          example: "Carlos Mamani"
+        grade:
+          type: number
+          minimum: 0
+          maximum: 100
+          example: 75
+        site:
+          type: string
+          enum: [LP, CB, SC]
+          example: "LP"
+        active:
+          type: integer
+          enum: [0, 1]
+          example: 1
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Operación exitosa"
+        data:
+          nullable: true
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: "Descripción del error"
+        errors:
+          nullable: true
+          example: null
+
+  responses:
+    BadRequest:
+      description: Parámetros o body inválidos
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Recurso no encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Conflict:
+      description: El recurso ya existe
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'

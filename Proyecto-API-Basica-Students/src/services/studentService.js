@@ -48,11 +48,10 @@ export function sortStudentsByField(studentList, sortBy, order){
     return studentList;
 }
 
-export function createStudent(student){
+export async function createStudent(student) {
     const nextId = studentList.length > 0 ? Math.max(...studentList.map(s => s.id)) + 1 : 1;
-    const newStudent = { id: nextId, ...student };
-    studentList.push(newStudent);
-    return newStudent;
+    const newStudent = new Student({ id: nextId, ...student });  
+    return await newStudent.save();  
 }
 
 export function getStudentById(id){
@@ -123,4 +122,8 @@ export function deleteStudentLogicallyById(studentId){
         success: true,
         data: studentList[pos]
     };
+}
+
+export async function getStudentByIdFromDB(id) {
+  return await Student.findOne({ id: id });
 }

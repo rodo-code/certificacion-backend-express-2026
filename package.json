@@ -1,0 +1,21 @@
+{
+  "name": "certificacion-backend-express-2026",
+  "version": "1.0.0",
+  "description": "| No de Práctica | Temas | Deadline |\r |---|---|---|\r | 1 | [Funciones](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Practicas/Practica1.md) | Viernes 15 de mayo 23:59 |\r | 2 | [Arreglos, Objetos y Funciones de Orden Superior](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Practicas/Practica2.md) | Martes 19 de mayo 23:59 |\r | 3 | [Asincronismo](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Practicas/Practica3.md) | Viernes 22 de mayo 23:59 |\r | 4 | [Servidores Básicos con Node](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Practicas/Practica4.md) | Lunes 25 de mayo 23:59 |\r | 5 | [REST API con Express y MongoDB](https://github.com/rodo-code/certificacion-backend-express-2026/blob/main/Practicas/Practica5.md) | Jueves 11 de junio 23:59 |",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rodo-code/certificacion-backend-express-2026.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/rodo-code/certificacion-backend-express-2026/issues"
+  },
+  "homepage": "https://github.com/rodo-code/certificacion-backend-express-2026#readme"
+}

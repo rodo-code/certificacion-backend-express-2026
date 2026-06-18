@@ -4,7 +4,8 @@ import {
   replaceStudentById,
   getFilteredStudents,
   updateStudentById,
-  deleteStudentLogicallyById
+  deleteStudentLogicallyById,
+  getStudentByIdFromDB
 } from "../services/studentService.js";
 
 import { validateStudentBody } from "../utils/studentValidator.js";
@@ -44,6 +45,13 @@ export async function saveStudent(req, res, next) {
   if(!studentValidator.validation){
     const error = Error(studentValidator.message);
     error.statusCode = 400;
+    return next(error);
+  }
+
+  const existingStudent = await getStudentByIdFromDB(Number(req.body.id));
+  if (existingStudent) {
+    const error = Error(`A student with id ${req.body.id} already exists`);
+    error.statusCode = 409;
     return next(error);
   }
   
