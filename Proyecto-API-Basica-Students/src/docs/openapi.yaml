@@ -45,6 +45,28 @@ paths:
         "400":
           description: Datos inválidos
 
+    put:
+      summary: Reemplazar completamente un estudiante
+      tags:
+        - Students
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReplaceStudentInput"
+      responses:
+        "200":
+          description: Estudiante reemplazado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentResponse"
+        "400":
+          description: Datos inválidos
+
   /api/students/{id}:
     get:
       summary: Obtener un estudiante por ID
@@ -131,6 +153,33 @@ components:
           example: "Ana"
         grade:
           type: number
+          example: 95
+        site:
+          type: string
+          example: "LP"
+        active:
+          type: boolean
+          example: true
+
+    ReplaceStudentInput:
+      type: object
+      required:
+        - id
+        - name
+        - grade
+        - site
+      properties:
+        id:
+          type: string
+          example: "6848d89a5f3e8c4a12345678"
+        name:
+          type: string
+          minLength: 2
+          example: "Ana"
+        grade:
+          type: number
+          minimum: 0
+          maximum: 100
           example: 95
         site:
           type: string
