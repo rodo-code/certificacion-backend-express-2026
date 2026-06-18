@@ -44,6 +44,27 @@ paths:
                 $ref: "#/components/schemas/StudentResponse"
         "400":
           description: Datos inválidos
+    put:
+      summary: Actualizar datos de un estudiante por ID
+      tags:
+        - Students
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateStudentWithIdInput"
+      responses:
+        "200":
+          description: Estudiante actualizado correctamente por ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentResponse"
+        "400":
+          description: Datos inválidos
+        "404":
+          description: Estudiante no encontrado
 
   /api/students/{id}:
     get:
@@ -180,6 +201,30 @@ components:
         active:
           type: boolean
           example: false
+    UpdateStudentWithIdInput:
+      type: object
+      required:
+        - id
+        - name
+        - grade
+        - site
+        - active
+      properties:
+        name:
+          type: string
+          minLength: 2
+          example: "Ana"
+        grade:
+          type: number
+          minimum: 0
+          maximum: 100
+          example: 95
+        site:
+          type: string
+          example: "LP"
+        active:
+          type: boolean
+          example: true
 
     StudentResponse:
       type: object
