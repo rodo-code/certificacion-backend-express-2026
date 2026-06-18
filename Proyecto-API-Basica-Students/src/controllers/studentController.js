@@ -102,7 +102,7 @@ export async function replaceStudent(req, res, next){
     active: req.body.active
   };
   const replacedStudent = await replaceStudentById(studentId, newStudent);
-  if(replaceStudent){
+  if(replacedStudent){
     return res.success(200,`Student with id ${studentId} succesfully totally updated`,newStudent);
   }
   else{
