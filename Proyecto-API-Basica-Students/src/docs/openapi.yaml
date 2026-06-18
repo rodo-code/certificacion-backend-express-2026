@@ -45,6 +45,31 @@ paths:
         "400":
           description: Datos inválidos
 
+    put:
+      summary: Reemplazar completamente la lista de estudiantes
+      tags:
+        - Students
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: "#/components/schemas/CreateStudentInput"
+      responses:
+        "200":
+          description: Lista de estudiantes reemplazada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentListResponse"
+        "400":
+          description: Datos inválidos o body incompleto
+        "404":
+          description: No se encontre estudiante con el ID proporcionado
+
   /api/students/{id}:
     get:
       summary: Obtener un estudiante por ID
