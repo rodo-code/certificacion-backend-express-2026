@@ -17,7 +17,7 @@ const app = express();
 
 await connectDB();
 
-const openApiDocument = YAML.load("./src/docs/openapi.yaml");
+const openApiDocument = YAML.load("./docs/openapi.yaml");
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
 
@@ -35,7 +35,7 @@ app.use("/api/users", userRoutes);
 
 app.use(
   OpenApiValidator.middleware({
-    apiSpec: "./src/docs/openapi.yaml",
+    apiSpec: "./docs/openapi.yaml",
     validateRequests: true,
     validateResponses: false
   })
