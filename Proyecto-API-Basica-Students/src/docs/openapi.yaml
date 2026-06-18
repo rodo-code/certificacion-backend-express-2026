@@ -45,6 +45,34 @@ paths:
         "400":
           description: Datos inválidos
 
+    put:
+      summary: Actualizar un estudiante
+      tags:
+        - Students
+      description: |
+        Ruta PUT /api/students
+
+        Esta ruta se usa para actualizar un estudiante completo.
+
+        En el body se manda el id del estudiante y los nuevos datos:
+
+        - id
+        - name
+        - grade
+        - site
+        - active
+
+        Si todo esta bien devuelve 200 con el estudiante actualizado.
+        Si falta algun dato devuelve 400.
+        Si no encuentra el estudiante devuelve 404.
+      responses:
+        "200":
+          description: Estudiante actualizado correctamente
+        "400":
+          description: Datos invalidos
+        "404":
+          description: Estudiante no encontrado
+
   /api/students/{id}:
     get:
       summary: Obtener un estudiante por ID
