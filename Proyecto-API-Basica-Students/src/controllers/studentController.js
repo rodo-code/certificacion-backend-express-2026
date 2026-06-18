@@ -51,13 +51,13 @@ export async function findStudents(req, res, next) {
 
 export async function saveStudent(req, res, next) {
 
-  const studentValidator = validateStudentBody(req.body,true,true);
+  /*const studentValidator = validateStudentBody(req.body,true,true);
 
   if(!studentValidator.validation){
     const error = Error(studentValidator.message);
     error.statusCode = 400;
     return next(error);
-  }
+  }*/
   
   const newStudent = await createStudent({
     name: req.body.name,
